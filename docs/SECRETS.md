@@ -32,3 +32,19 @@ The repository should only store `.env.example` files with safe placeholder valu
 
 Application code should read secrets through `packages.shared.config.load_settings()` instead of directly calling `os.getenv()` in every file.
 
+## AI provider variables
+
+For Gemini, set:
+
+- `MODEL_PROVIDER=gemini`
+- `MODEL_NAME`
+- `GEMINI_API_KEY`
+
+For Azure OpenAI, set:
+
+- `MODEL_PROVIDER=azure`
+- `MODEL_NAME`
+- `AZURE_OPENAI_API_KEY`
+- `AZURE_OPENAI_ENDPOINT`
+- `AZURE_OPENAI_API_VERSION`
+- `AZURE_OPENAI_DEPLOYMENT`

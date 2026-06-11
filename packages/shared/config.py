@@ -19,10 +19,13 @@ class Settings:
     gemini_api_key: str | None
     azure_openai_api_key: str | None
     azure_openai_endpoint: str | None
+    azure_openai_api_version: str | None
+    azure_openai_deployment: str | None
     telegram_bot_token: str | None
     whatsapp_access_token: str | None
     whatsapp_phone_number_id: str | None
 
+    # Returns a required setting or raises a clear error.
     def require(self, name: str) -> str:
         value = getattr(self, name)
         if not value:
@@ -31,6 +34,7 @@ class Settings:
         return value
 
 
+# Loads settings from environment variables and an optional env file.
 def load_settings(env_file: str | Path | None = None) -> Settings:
     if env_file is not None:
         load_env_file(env_file)
@@ -44,12 +48,15 @@ def load_settings(env_file: str | Path | None = None) -> Settings:
         gemini_api_key=_get("GEMINI_API_KEY"),
         azure_openai_api_key=_get("AZURE_OPENAI_API_KEY"),
         azure_openai_endpoint=_get("AZURE_OPENAI_ENDPOINT"),
+        azure_openai_api_version=_get("AZURE_OPENAI_API_VERSION"),
+        azure_openai_deployment=_get("AZURE_OPENAI_DEPLOYMENT"),
         telegram_bot_token=_get("TELEGRAM_BOT_TOKEN"),
         whatsapp_access_token=_get("WHATSAPP_ACCESS_TOKEN"),
         whatsapp_phone_number_id=_get("WHATSAPP_PHONE_NUMBER_ID"),
     )
 
 
+# Loads key-value pairs from a local env file.
 def load_env_file(path: str | Path) -> None:
     env_path = Path(path)
     if not env_path.exists():
@@ -68,6 +75,7 @@ def load_env_file(path: str | Path) -> None:
             os.environ[key] = value
 
 
+# Reads an environment variable with an optional default.
 def _get(name: str, default: str | None = None) -> str | None:
     value = os.getenv(name)
     if value is None or value == "":
@@ -75,6 +83,7 @@ def _get(name: str, default: str | None = None) -> str | None:
     return value
 
 
+# Removes matching quotes around env values.
 def _clean_env_value(value: str) -> str:
     if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
         return value[1:-1]
